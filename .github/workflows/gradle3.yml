@@ -1,0 +1,36 @@
+name: Build Jar Package
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Checkout repository code
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    # Set up Java environment
+    - name: Setup JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+
+    # Install dependencies and build JAR
+    - name: Build with Gradle
+      run: |
+        ./gradlew clean build
+
+    # Save build artifact
+    - name: Save Jar Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: application-jar
+        path: build/libs/*.jar
